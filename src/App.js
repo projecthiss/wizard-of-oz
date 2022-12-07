@@ -18,6 +18,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import {wait} from "@testing-library/user-event/dist/utils";
 
+
 const highlightingPath = 'bandit-artificial-intelligence-hiss'
 const controlGroupPath = 'hiss-artificial-intelligence-bandit'
 
@@ -111,14 +112,13 @@ class App extends React.Component {
 			cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', 0, {path: '/', expires: tomorrow, sameSite: 'none'});
 			currentTicket = 0
 		}
-		console.log(currentTicket);
-		const openTicketsDf = await dfd.readExcel(window.location.origin + '/wizard_of_oz_experiment_data_open.xlsx')
-		const solutionTicketsDf = await dfd.readExcel(window.location.origin + '/wizard_of_oz_experiment_data_solution.xlsx')
-		const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
 
-		openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
-		const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf, )
-		this.setState({
+        const openTicketsDf = await dfd.readExcel( 'http://' + window.location.host+'/wizard_of_oz_experiment_data_open.xlsx')
+        const solutionTicketsDf = await dfd.readExcel('http://' + window.location.host+'/wizard_of_oz_experiment_data_solution.xlsx')
+        const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
+        openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
+        const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf, )
+        this.setState({
 			predictionState: true,
 			currentTicket: currentTicket,
 			openTicketsDf: openTicketsDf,
