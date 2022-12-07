@@ -60,7 +60,6 @@ const highlightingCategories = [{name: 'Fehlerbeschreibung', color: '#ffdc00'}, 
 	color: 'rgba(125,255,39,0.4)'
 }, {name: 'Auslöser', color: '#5d0808'}, {name: 'Sonstiges', color: '#3741ff'}]
 const getColorForKey = (key) => {
-	console.log(key)
 	for (let a of highlightingCategories) {
 		if (a.name === key) {
 			return a.color
@@ -104,16 +103,19 @@ class App extends React.Component {
 
 	async componentDidMount() {
 		let currentTicket = parseInt(cookies.get('HISS-WIZARD-OF-OZ_CURRENT_TICKET'))
-		if (currentTicket === undefined) {
+		console.log(currentTicket)
+		if (isNaN(currentTicket)) {
+			console.log("Hi")
 			const tomorrow = new Date();
 			tomorrow.setDate(new Date().getDate() + 7);
 			cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', 0, {path: '/', expires: tomorrow, sameSite: 'none'});
 			currentTicket = 0
 		}
+		console.log(currentTicket);
 		const openTicketsDf = await dfd.readExcel(window.location.origin + '/wizard_of_oz_experiment_data_open.xlsx')
 		const solutionTicketsDf = await dfd.readExcel(window.location.origin + '/wizard_of_oz_experiment_data_solution.xlsx')
 		const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
-		console.log(openTicket)
+
 		openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
 		const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf, )
 		this.setState({
@@ -134,7 +136,7 @@ class App extends React.Component {
 
 		let rowObject = {}
 		let row = dfd.toJSON(usedDf.loc({rows: usedDf['systemId'].eq(parseInt(n))}), {format: 'row'})
-		console.log(row)
+
 		for (let key in row) {
 			rowObject[key] = row[key][0]
 		}
@@ -151,12 +153,10 @@ class App extends React.Component {
 		for (let key of keys) {
 			let rowObject = {}
 			let row = dfd.toJSON(usedDf.loc({rows: usedDf['systemId'].eq(parseInt(currentOpenTicket[key]))}), {format: 'row'})
-			console.log(currentOpenTicket)
-			console.log(row)
+
 			for (let item in row) {
 				rowObject[item] = row[item][0]
 			}
-			console.log(rowObject)
 			rowObject.ticketDescriptionHighlighting = JSON.parse(rowObject.ticketDescriptionHighlighting)
 			rowObject['highlightedHTML'] = this.getMarkup(rowObject)
 			solutionTicketsArray.push(rowObject)
@@ -203,8 +203,7 @@ class App extends React.Component {
 		}
 
 		d.ticketDescriptionHighlighting = allMarkUp
-		console.log("a")
-		console.log(d)
+
 		this.setState({openTicket: d, highlightedHTML: this.getMarkup(d)})
 
 
@@ -240,7 +239,7 @@ class App extends React.Component {
 		if (sel.rangeCount !== 0) {
 
 			let range = sel.getRangeAt(0);
-			console.log(range)
+
 			let sel_start = range.startOffset;
 			let sel_end = range.endOffset;
 
@@ -265,8 +264,6 @@ class App extends React.Component {
 		const tomorrow = new Date();
 		tomorrow.setDate(new Date().getDate() + 7);
 		const currentTicket = parseInt(this.state.currentTicket) + 1
-		console.log(currentTicket)
-		console.log(this.state.maxTicketNumber )
 		if (currentTicket>this.state.maxTicketNumber){
 			alert("Finished")
 			return
@@ -274,7 +271,6 @@ class App extends React.Component {
 		cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow, sameSite: 'none'});
 		const openTicket = this.getOpenTickets(currentTicket)
 		openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
-		console.log(openTicket)
 		const solutionTicket = this.getSolutionTicketByRow(openTicket)
 		this.setState({
 			predictionState: true,
@@ -290,11 +286,9 @@ class App extends React.Component {
 		const highlightingCode = object.ticketDescriptionHighlighting.sort((a, b) => parseFloat(b.end) - parseFloat(a.end));
 
 		for (let a of highlightingCode) {
-			console.log(a)
 			textEdit = [textEdit.slice(0, a.end), "</span>", textEdit.slice(a.end)].join('');
 			textEdit = [textEdit.slice(0, a.start), "<span style='background-color: " + getColorForKey(a.key) + "'>", textEdit.slice(a.start)].join('');
 		}
-		console.log(textEdit)
 		return textEdit
 	}
 	clearAllMarkUp = () => {
@@ -332,8 +326,7 @@ class App extends React.Component {
 								<Grid item xs={12}>
 									{this.state.predictionState ?
 										<Box display="flex" justifyContent="flex-start">
-											{console.log(this.state.maxTicketNumber)}
-											{this.state.currentTicket==this.state.maxTicketNumber-1 ? <></>:
+											{this.state.currentTicket===this.state.maxTicketNumber-1 ? <></>:
 											<Button variant="contained" endIcon={<SendIcon/>} onClick={this.getPrediction}>
 												Generiere Empfehlung durch KI Basierend auf dem Highlighting
 											</Button>}
