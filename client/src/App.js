@@ -113,8 +113,8 @@ class App extends React.Component {
 			currentTicket = 0
 		}
 
-        const openTicketsDf = await dfd.readExcel( 'http://' + window.location.host+'/wizard_of_oz_experiment_data_open.xlsx')
-        const solutionTicketsDf = await dfd.readExcel('http://' + window.location.host+'/wizard_of_oz_experiment_data_solution.xlsx')
+        const openTicketsDf = await dfd.readExcel( 'https://' + window.location.host+'/wizard_of_oz_experiment_data_open.xlsx')
+        const solutionTicketsDf = await dfd.readExcel('https://' + window.location.host+'/wizard_of_oz_experiment_data_solution.xlsx')
         const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
         openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
         const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf, )
