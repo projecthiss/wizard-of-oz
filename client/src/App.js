@@ -109,7 +109,7 @@ class App extends React.Component {
 			console.log("Hi")
 			const tomorrow = new Date();
 			tomorrow.setDate(new Date().getDate() + 7);
-			cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', 0, {path: '/', expires: tomorrow, sameSite: 'none'});
+			cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', 0, {path: '/', expires: tomorrow});
 			currentTicket = 0
 		}
 
@@ -268,7 +268,7 @@ class App extends React.Component {
 			alert("Finished")
 			return
 		}
-		cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow, sameSite: 'none'});
+		cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow});
 		const openTicket = this.getOpenTickets(currentTicket)
 		openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
 		const solutionTicket = this.getSolutionTicketByRow(openTicket)
