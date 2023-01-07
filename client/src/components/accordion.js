@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PropTypes from "prop-types";
-import {Divider, Grid} from "@mui/material";
+import {Divider, Grid, Rating} from "@mui/material";
 
 class ControlledAccordions extends React.Component {
 	constructor(props) {
@@ -53,22 +53,31 @@ class ControlledAccordions extends React.Component {
 										{item.ticketId}
 									</Typography>
 								</Grid>
-								<Grid item xs={12} md={7}>
+								<Grid item xs={12} md={6}>
 									<Typography variant='subtitle1' sx={{fontWeight: '500'}} align='left'>
 										{item.ticketTitle}
 									</Typography>
 								</Grid>
 
-								<Grid item xs={6} md={2} align='left'>
+								<Grid item xs={4} md={2} align='left'>
 									<Typography sx={{color: 'text.secondary'}}>
 										{item.ticketDate}
 									</Typography>
 								</Grid>
-								<Grid item xs={6} md={2}>
+								<Grid item xs={4} md={2}>
 									<Typography align='left'>
 										Ersteller: {item.ticketCreator}
 									</Typography>
 								</Grid>
+                                <Grid item xs={4} md={1}>
+                                    <Rating
+                                        align='left'
+                                        value={this.props.solutionFeedback[position]}
+                                        onChange={(event, newValue) => {
+                                        this.props.updateFeedBackValue(position, newValue)
+                                    }}
+                                        />
+                                </Grid>
 							</Grid>
 						</AccordionSummary>
 						<AccordionDetails>
@@ -77,14 +86,13 @@ class ControlledAccordions extends React.Component {
 								Problembeschreibung
 							</Typography>
 							<Typography whiteSpace="pre-wrap" align={"left"}
-							            dangerouslySetInnerHTML={{__html: item.highlightedHTML.replaceAll('\r\n', '<br>')}}>
+							            dangerouslySetInnerHTML={{__html: item.highlightedHTML}}>
 							</Typography>
 							<Divider sx={{margin: 2}}/>
 							<Typography variant='subtitle1' sx={{fontWeight: '500'}} align="left">
 								Lösungshistorie
 							</Typography>
-							<Typography align="left">
-								{item.ticketSolutionHistory}
+							<Typography align="left" dangerouslySetInnerHTML={{__html: item.ticketSolutionHistory.replaceAll('\r\n', '<br>')}}>
 							</Typography>
 							<Typography>
 
@@ -99,7 +107,9 @@ class ControlledAccordions extends React.Component {
 }
 
 ControlledAccordions.propTypes = {
-	solutionTickets: PropTypes.arrayOf(PropTypes.object).isRequired
+	solutionTickets: PropTypes.arrayOf(PropTypes.object).isRequired,
+    solutionFeedback: PropTypes.arrayOf(PropTypes.number).isRequired,
+    updateFeedBackValue: PropTypes.func.isRequired
 }
 
 export default ControlledAccordions;
