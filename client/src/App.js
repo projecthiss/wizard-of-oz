@@ -2,7 +2,6 @@ import React from "react";
 import './App.css';
 import * as dfd from "danfojs"
 import Cookies from 'universal-cookie';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import {Container} from "@mui/material";
@@ -45,7 +44,7 @@ function appBarLabel(label) {
 
 
 const cookies = new Cookies('HEADER');
-
+/*
 function Copyright(props) {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -57,7 +56,7 @@ function Copyright(props) {
             {'.'}
         </Typography>
     );
-}
+}*/
 
 const highlightingCategories = [{name: 'Fehlerbeschreibung', color: '#ffdc00'}, {
     name: 'System',
@@ -84,7 +83,7 @@ class App extends React.Component {
         let error = false
 
         if ((groupName !== highlightingPath && groupName !== controlGroupPath) ||
-            window.location.pathname.split('/')[2] == undefined || window.location.pathname.split('/')[2] == '') {
+            window.location.pathname.split('/')[2] === undefined || window.location.pathname.split('/')[2] === '') {
             error = true
             console.log("ERROR")
         }
@@ -122,16 +121,16 @@ class App extends React.Component {
         console.log('B')
         const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
         const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
-        if (currentTicket != -1) {
+        if (currentTicket !== -1) {
             const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
-            console.log(openTicket)
             openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
+
             const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf,)
             this.setState({
                 predictionState: true,
                 currentTicket: currentTicket,
-                openTicketsDf: openTicketsDf,
-                solutionTicketsDf: solutionTicketsDf,
+         //       openTicketsDf: openTicketsDf,
+           //     solutionTicketsDf: solutionTicketsDf,
                 maxTicketNumber: openTicketsDf.shape[0],
                 openTicket: openTicket,
                 solutionTickets: solutionTicket,
@@ -277,7 +276,7 @@ class App extends React.Component {
 
 
     }
-    leaveIntro = () => {
+    leaveIntro = async () => {
         const tomorrow = new Date();
         tomorrow.setDate(new Date().getDate() + 7);
         const currentTicket = parseInt(this.state.currentTicket) + 1
@@ -309,10 +308,7 @@ class App extends React.Component {
                 this.setState({loading: false})
                 return
             }
-            cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow});
-            const openTicket = this.getOpenTickets(currentTicket)
-            openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
-            const solutionTicket = this.getSolutionTicketByRow(openTicket)
+
             let feedback = {
                 usercode: this.state.usercode,
                 systemId: this.state.openTicket.systemId,
@@ -332,14 +328,15 @@ class App extends React.Component {
                 method: 'POST',
                 body: JSON.stringify({feedback: feedback}),
             }).then((response) => {
-                switch (response.status) {
-                    case 200:
-                        return response
-                    default:
-                        alert("Error saving your Feedback")
-                        throw new Error("error")
+                console.log(response)
+                if (response.status !== 200) {
+                    throw new Error('fail')
                 }
-            }).then((d)=>{
+            }).then(async (d) => {
+                cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow});
+                const openTicket = this.getOpenTickets(currentTicket)
+                openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
+                const solutionTicket = this.getSolutionTicketByRow(openTicket)
                 this.setState({
                     loading: false,
                     predictionState: true,
@@ -349,7 +346,10 @@ class App extends React.Component {
                     highlightedHTML: this.getMarkup(openTicket),
                     solutionFeedback: [0, 0, 0],
                 })
-            }).catch(()=>{})
+            }).catch((e) => {
+                console.log(e)
+                alert("Error saving your Feedback")
+            })
         })
     }
     updateFeedback = (id, value) => {
@@ -389,7 +389,7 @@ class App extends React.Component {
                 </Backdrop>
                 {this.state.error ? "Please use the correct URL provided to you." :
                     <div>
-                        {this.state.currentTicket == -1 ? <>
+                        {this.state.currentTicket === -1 ? <>
                                 <Container component="main" maxWidth="lg">
 
 
@@ -459,7 +459,7 @@ class App extends React.Component {
                                             </Grid> : <></>}
                                     </Grid>
                                     {/*<Copyright sx={{mt: 8, mb: 4}}/>*/}
-                                </Container>z
+                                </Container>
                             </>}
                     </div>
                 }
