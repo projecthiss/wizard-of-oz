@@ -109,16 +109,12 @@ class App extends React.Component {
 
     async componentDidMount() {
         let currentTicket = parseInt(cookies.get('HISS-WIZARD-OF-OZ_CURRENT_TICKET'))
-        console.log('A')
-        console.log(currentTicket)
         if (isNaN(currentTicket)) {
-            console.log("Hi")
             const tomorrow = new Date();
             tomorrow.setDate(new Date().getDate() + 7);
             cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', -1, {path: '/', expires: tomorrow});
             currentTicket = -1
         }
-        console.log('B')
         const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
         const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
         if (currentTicket !== -1) {
@@ -136,8 +132,7 @@ class App extends React.Component {
                 solutionTickets: solutionTicket,
                 highlightedHTML: this.getMarkup(openTicket)
             })
-            console.log(solutionTicket)
-        } else {
+            } else {
             this.setState({
                 predictionState: true,
                 currentTicket: currentTicket,
@@ -290,7 +285,6 @@ class App extends React.Component {
         const openTicket = this.getOpenTickets(currentTicket)
         openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
         const solutionTicket = this.getSolutionTicketByRow(openTicket)
-        console.log(this.getMarkup(openTicket))
         this.setState({
             predictionState: true,
             currentTicket: currentTicket,
@@ -329,7 +323,6 @@ class App extends React.Component {
                 method: 'POST',
                 body: JSON.stringify({feedback: feedback}),
             }).then((response) => {
-                console.log(response)
                 if (response.status !== 200) {
                     throw new Error('fail')
                 }
