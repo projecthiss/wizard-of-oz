@@ -38,10 +38,9 @@ class TicketDisplay extends React.Component {
                                 <Grid item xs={12} md={12}>
                                     <div id='textField'>
                                         <Typography whiteSpace="pre-wrap" align={"left"}
-                                                    dangerouslySetInnerHTML={{__html: this.props.highlightedHTML}}>
+                                                    dangerouslySetInnerHTML={{__html: this.props.highlightedHTML.replaceAll('\r\n', '<br>')}}>
                                         </Typography>
                                     </div>
-
                                 </Grid>
                             </Grid>
                         </Grid>

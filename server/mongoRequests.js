@@ -2,7 +2,6 @@ const mongoose = require("./mongoConnection").mongoose
 const model = require('./mongoModel')
 
 const feedbackToDatabase = (req, res,) => {
-    console.log("HEY")
     const feedback = req.body.feedback
     model.userInput.update({usercode: feedback.usercode, systemId: feedback.systemId}, feedback, {
         upsert: true,

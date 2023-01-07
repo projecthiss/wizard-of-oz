@@ -86,7 +86,7 @@ class ControlledAccordions extends React.Component {
 								Problembeschreibung
 							</Typography>
 							<Typography whiteSpace="pre-wrap" align={"left"}
-							            dangerouslySetInnerHTML={{__html: item.highlightedHTML}}>
+							            dangerouslySetInnerHTML={{__html: item.highlightedHTML.replaceAll('\r\n', '<br>')}}>
 							</Typography>
 							<Divider sx={{margin: 2}}/>
 							<Typography variant='subtitle1' sx={{fontWeight: '500'}} align="left">
