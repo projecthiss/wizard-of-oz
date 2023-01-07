@@ -92,8 +92,7 @@ class ControlledAccordions extends React.Component {
 							<Typography variant='subtitle1' sx={{fontWeight: '500'}} align="left">
 								Lösungshistorie
 							</Typography>
-							<Typography align="left">
-								{item.ticketSolutionHistory}
+							<Typography align="left" dangerouslySetInnerHTML={{__html: item.ticketSolutionHistory.replaceAll('\r\n', '<br>')}}>
 							</Typography>
 							<Typography>
 

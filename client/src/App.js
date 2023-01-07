@@ -136,6 +136,7 @@ class App extends React.Component {
                 solutionTickets: solutionTicket,
                 highlightedHTML: this.getMarkup(openTicket)
             })
+            console.log(solutionTicket)
         } else {
             this.setState({
                 predictionState: true,
