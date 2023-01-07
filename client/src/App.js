@@ -22,6 +22,9 @@ import {wait} from "@testing-library/user-event/dist/utils";
 const highlightingPath = 'bandit-artificial-intelligence-hiss'
 const controlGroupPath = 'hiss-artificial-intelligence-bandit'
 
+const editingVideo = 'https://www.youtube.com/embed/uCyp5IKjrxU'
+const noEditingVideo = "https://www.youtube.com/embed/52Gg9CqhbP8"
+
 
 function appBarLabel(label) {
     return (
@@ -80,7 +83,8 @@ class App extends React.Component {
         console.log(groupName)
         let error = false
 
-        if (groupName !== highlightingPath && groupName !== controlGroupPath) {
+        if ((groupName !== highlightingPath && groupName !== controlGroupPath) ||
+            window.location.pathname.split('/')[2] == undefined || window.location.pathname.split('/')[2] == '') {
             error = true
             console.log("ERROR")
         }
@@ -90,6 +94,7 @@ class App extends React.Component {
         //read position from cookie
         this.state = {
             error: error,
+            usercode: window.location.pathname.split('/')[2],
             highlightingEnabled: highlightingEnabled,
             currentTicket: null,
             openTicketsDf: {},
@@ -97,39 +102,51 @@ class App extends React.Component {
             maxTicketNumber: null,
             openTicket: {},
             solutionTickets: [],
-            loading: false
+            loading: false,
+            solutionFeedback: [0, 0, 0],
         };
 
     }
 
     async componentDidMount() {
         let currentTicket = parseInt(cookies.get('HISS-WIZARD-OF-OZ_CURRENT_TICKET'))
+        console.log('A')
         console.log(currentTicket)
         if (isNaN(currentTicket)) {
             console.log("Hi")
             const tomorrow = new Date();
             tomorrow.setDate(new Date().getDate() + 7);
-            cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', 0, {path: '/', expires: tomorrow});
-            currentTicket = 0
+            cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', -1, {path: '/', expires: tomorrow});
+            currentTicket = -1
+        }
+        console.log('B')
+        const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
+        const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
+        if (currentTicket != -1) {
+            const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
+            console.log(openTicket)
+            openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
+            const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf,)
+            this.setState({
+                predictionState: true,
+                currentTicket: currentTicket,
+                openTicketsDf: openTicketsDf,
+                solutionTicketsDf: solutionTicketsDf,
+                maxTicketNumber: openTicketsDf.shape[0],
+                openTicket: openTicket,
+                solutionTickets: solutionTicket,
+                highlightedHTML: this.getMarkup(openTicket)
+            })
+        } else {
+            this.setState({
+                predictionState: true,
+                currentTicket: currentTicket,
+                openTicketsDf: openTicketsDf,
+                solutionTicketsDf: solutionTicketsDf,
+                maxTicketNumber: openTicketsDf.shape[0],
+            })
         }
 
-        const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:'? 'https:':'http:' ) +'//'+ window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
-        const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:'? 'https:':'http:' ) +'//'+ window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
-
-        const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
-        console.log(openTicket)
-        openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
-        const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf,)
-        this.setState({
-            predictionState: true,
-            currentTicket: currentTicket,
-            openTicketsDf: openTicketsDf,
-            solutionTicketsDf: solutionTicketsDf,
-            maxTicketNumber: openTicketsDf.shape[0],
-            openTicket: openTicket,
-            solutionTickets: solutionTicket,
-            highlightedHTML: this.getMarkup(openTicket)
-        })
 
     }
 
@@ -260,20 +277,20 @@ class App extends React.Component {
 
 
     }
-
-    nextTicket = async () => {
-
+    leaveIntro = () => {
         const tomorrow = new Date();
         tomorrow.setDate(new Date().getDate() + 7);
         const currentTicket = parseInt(this.state.currentTicket) + 1
         if (currentTicket > this.state.maxTicketNumber) {
             alert("Finished")
+            this.setState({loading: false})
             return
         }
         cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow});
         const openTicket = this.getOpenTickets(currentTicket)
         openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
         const solutionTicket = this.getSolutionTicketByRow(openTicket)
+        console.log(this.getMarkup(openTicket))
         this.setState({
             predictionState: true,
             currentTicket: currentTicket,
@@ -282,7 +299,64 @@ class App extends React.Component {
             highlightedHTML: this.getMarkup(openTicket)
         })
     }
-
+    nextTicket = () => {
+        this.setState({loading: true}, () => {
+            const tomorrow = new Date();
+            tomorrow.setDate(new Date().getDate() + 7);
+            const currentTicket = parseInt(this.state.currentTicket) + 1
+            if (currentTicket > this.state.maxTicketNumber) {
+                alert("Finished")
+                this.setState({loading: false})
+                return
+            }
+            cookies.set('HISS-WIZARD-OF-OZ_CURRENT_TICKET', currentTicket, {path: '/', expires: tomorrow});
+            const openTicket = this.getOpenTickets(currentTicket)
+            openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
+            const solutionTicket = this.getSolutionTicketByRow(openTicket)
+            let feedback = {
+                usercode: this.state.usercode,
+                systemId: this.state.openTicket.systemId,
+                ticketId: this.state.openTicket.ticketId,
+                group: this.state.highlightingEnabled ? 'Editing' : 'NoEditing',
+                givenHighlighting: this.state.openTicket.ticketDescriptionHighlighting,
+                feedback: {
+                    solutionId_one: this.state.solutionTickets[0].systemId,
+                    solutionFeedback_one: this.state.solutionFeedback[0],
+                    solutionId_two: this.state.solutionTickets[1].systemId,
+                    solutionFeedback_two: this.state.solutionFeedback[1],
+                    solutionId_three: this.state.solutionTickets[2].systemId,
+                    solutionFeedvack_three: this.state.solutionFeedback[2],
+                }
+            }
+            fetch('/api/feedbackToDatabase', {
+                method: 'POST',
+                body: JSON.stringify({feedback: feedback}),
+            }).then((response) => {
+                switch (response.status) {
+                    case 200:
+                        return response
+                    default:
+                        alert("Error saving your Feedback")
+                        throw new Error("error")
+                }
+            }).then((d)=>{
+                this.setState({
+                    loading: false,
+                    predictionState: true,
+                    currentTicket: currentTicket,
+                    openTicket: openTicket,
+                    solutionTickets: solutionTicket,
+                    highlightedHTML: this.getMarkup(openTicket),
+                    solutionFeedback: [0, 0, 0],
+                })
+            }).catch(()=>{})
+        })
+    }
+    updateFeedback = (id, value) => {
+        let solutionFeedback = this.state.solutionFeedback
+        solutionFeedback[id] = value
+        this.setState({solutionFeedback: solutionFeedback})
+    }
     clearAllMarkUp = () => {
         if (window.confirm('Are you sure you want to clear all Highlighting?')) {
             // Save it!
@@ -315,42 +389,78 @@ class App extends React.Component {
                 </Backdrop>
                 {this.state.error ? "Please use the correct URL provided to you." :
                     <div>
-                        {appBarLabel('HISS - KI basierte Lösungsempfehlung')}
+                        {this.state.currentTicket == -1 ? <>
+                                <Container component="main" maxWidth="lg">
 
-                        <Container component="main" maxWidth="lg">
+
+                                    <Grid container spacing={2}>
+
+                                        <Grid item xs={12}>
+                                            <Box display="flex" justifyContent="flex-end">
+                                                <iframe
+                                                    src={this.state.highlightingEnabled ? editingVideo : noEditingVideo}
+                                                    title="Intro Video" frameBorder="0"
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                    allowFullScreen></iframe>
+                                            </Box>
+                                        </Grid>
 
 
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TicketDisplay openTicket={this.state.openTicket}
-                                                   highlightingCategories={highlightingCategories}
-                                                   editHighlighting={this.markText}
-                                                   highlightingEnabled={this.state.highlightingEnabled}
-                                                   highlightedHTML={this.state.highlightedHTML}
-                                                   clearAllHighlighting={this.clearAllMarkUp}/>
-
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {this.state.predictionState ?
-                                        <Box display="flex" justifyContent="flex-start">
-                                            {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <></> :
+                                        <Grid item xs={12}>
+                                            <Box display="flex" justifyContent="flex-end">
                                                 <Button variant="contained" endIcon={<SendIcon/>}
-                                                        onClick={this.getPrediction}>
-                                                    Generiere Empfehlung durch KI Basierend auf dem Highlighting
-                                                </Button>}
-                                        </Box> : <Box display="flex" justifyContent="flex-end">
-                                            <Button variant="contained" endIcon={<SendIcon/>} onClick={this.nextTicket}>
-                                                Zum nächsten Ticket
-                                            </Button>
-                                        </Box>}
-                                </Grid>
-                                {!this.state.predictionState ?
-                                    <Grid item xs={12}>
-                                        <ControlledAccordions solutionTickets={this.state.solutionTickets}/>
-                                    </Grid> : <></>}
-                            </Grid>
-                            {/*<Copyright sx={{mt: 8, mb: 4}}/>*/}
-                        </Container>
+                                                        onClick={this.leaveIntro}>
+                                                    Nimm an der Studie teil
+                                                </Button>
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Container>
+                            </> :
+                            <>
+                                {appBarLabel('HISS - KI basierte Lösungsempfehlung')}
+
+                                <Container component="main" maxWidth="lg">
+
+
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <TicketDisplay openTicket={this.state.openTicket}
+                                                           highlightingCategories={highlightingCategories}
+                                                           editHighlighting={this.markText}
+                                                           highlightingEnabled={this.state.highlightingEnabled}
+                                                           highlightedHTML={this.state.highlightedHTML}
+                                                           clearAllHighlighting={this.clearAllMarkUp}
+
+                                            />
+
+
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            {this.state.predictionState ?
+                                                <Box display="flex" justifyContent="flex-start">
+                                                    {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <></> :
+                                                        <Button variant="contained" endIcon={<SendIcon/>}
+                                                                onClick={this.getPrediction}>
+                                                            Generiere Empfehlung durch KI Basierend auf dem Highlighting
+                                                        </Button>}
+                                                </Box> : <Box display="flex" justifyContent="flex-end">
+                                                    <Button variant="contained" endIcon={<SendIcon/>}
+                                                            onClick={this.nextTicket}>
+                                                        Zum nächsten Ticket
+                                                    </Button>
+                                                </Box>}
+                                        </Grid>
+                                        {!this.state.predictionState ?
+                                            <Grid item xs={12}>
+                                                <ControlledAccordions updateFeedBackValue={this.updateFeedback}
+                                                                      solutionTickets={this.state.solutionTickets}
+                                                                      solutionFeedback={this.state.solutionFeedback}/>
+                                            </Grid> : <></>}
+                                    </Grid>
+                                    {/*<Copyright sx={{mt: 8, mb: 4}}/>*/}
+                                </Container>z
+                            </>}
                     </div>
                 }
 
