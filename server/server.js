@@ -1,15 +1,6 @@
 const express = require('express')
-const bodyParser  =require('body-parser')
 const path = require('path')
-const {feedbackToDatabase} = require("./mongoRequests");
 const app = express()
-app.use(express.json(
-    {type: ['application/json', 'text/plain']}
-))
-
-// configure the middleware fpr requests
-app.use(bodyParser.json({limit: '50mb'}))
-app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json(
     {type: ['application/json', 'text/plain']}
 ))
@@ -20,8 +11,6 @@ const router = express.Router()
 const staticFiles = express.static(path.join(__dirname, '../../client/build'))
 
 app.use(staticFiles)
-
-app.post('/api/feedbackToDatabase', feedbackToDatabase)
 
 //bandit.setActions()
 

@@ -5,7 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PropTypes from "prop-types";
-import {Divider, Grid, Rating} from "@mui/material";
+import {Divider, Grid} from "@mui/material";
 
 class ControlledAccordions extends React.Component {
 	constructor(props) {
@@ -53,31 +53,22 @@ class ControlledAccordions extends React.Component {
 										{item.ticketId}
 									</Typography>
 								</Grid>
-								<Grid item xs={12} md={6}>
+								<Grid item xs={12} md={7}>
 									<Typography variant='subtitle1' sx={{fontWeight: '500'}} align='left'>
 										{item.ticketTitle}
 									</Typography>
 								</Grid>
 
-								<Grid item xs={4} md={2} align='left'>
+								<Grid item xs={6} md={2} align='left'>
 									<Typography sx={{color: 'text.secondary'}}>
 										{item.ticketDate}
 									</Typography>
 								</Grid>
-								<Grid item xs={4} md={2}>
+								<Grid item xs={6} md={2}>
 									<Typography align='left'>
 										Ersteller: {item.ticketCreator}
 									</Typography>
 								</Grid>
-                                <Grid item xs={4} md={1}>
-                                    <Rating
-                                        align='left'
-                                        value={this.props.solutionFeedback[position]}
-                                        onChange={(event, newValue) => {
-                                        this.props.updateFeedBackValue(position, newValue)
-                                    }}
-                                        />
-                                </Grid>
 							</Grid>
 						</AccordionSummary>
 						<AccordionDetails>
@@ -108,9 +99,7 @@ class ControlledAccordions extends React.Component {
 }
 
 ControlledAccordions.propTypes = {
-	solutionTickets: PropTypes.arrayOf(PropTypes.object).isRequired,
-    solutionFeedback: PropTypes.arrayOf(PropTypes.number).isRequired,
-    updateFeedBackValue: PropTypes.func.isRequired
+	solutionTickets: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
 export default ControlledAccordions;
