@@ -13,7 +13,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box'
 import TicketDisplay from "./components/ticketDisplay";
 import Backdrop from '@mui/material/Backdrop';
-
 import CircularProgress from '@mui/material/CircularProgress';
 import {wait} from "@testing-library/user-event/dist/utils";
 
@@ -24,6 +23,7 @@ const controlGroupPath = 'hiss-artificial-intelligence-bandit'
 const editingVideo = 'https://www.youtube.com/embed/uCyp5IKjrxU'
 const noEditingVideo = "https://www.youtube.com/embed/52Gg9CqhbP8"
 
+const surveyLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
 function appBarLabel(label) {
     return (
@@ -117,6 +117,10 @@ class App extends React.Component {
         }
         const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
         const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
+        console.log("here")
+        console.log(openTicketsDf)
+        console.log(openTicketsDf.shape[0])
+        console.log(this.state.currentTicket)
         if (currentTicket !== -1) {
             const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
             openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
@@ -147,10 +151,11 @@ class App extends React.Component {
 
 
     getOpenTickets = (n, usedDf = this.state.openTicketsDf) => {
-
+        console.log(n)
+        console.log("hi")
         let rowObject = {}
         let row = dfd.toJSON(usedDf.loc({rows: usedDf['systemId'].eq(parseInt(n))}), {format: 'row'})
-
+        console.log("Yeah")
         for (let key in row) {
             rowObject[key] = row[key][0]
         }
@@ -248,26 +253,32 @@ class App extends React.Component {
     }
 
     markText = (key) => {
-        let container = document.getElementById("textField")
-        let sel = window.getSelection();
-        if (sel.rangeCount !== 0) {
+        if (this.state.predictionState){
 
-            let range = sel.getRangeAt(0);
+            let container = document.getElementById("textField")
+            let sel = window.getSelection();
+            if (sel.rangeCount !== 0) {
 
-            let sel_start = range.startOffset;
-            let sel_end = range.endOffset;
+                let range = sel.getRangeAt(0);
 
-            let charsBeforeStart = this.getCharactersCountUntilNode(range.startContainer, container);
-            let charsBeforeEnd = this.getCharactersCountUntilNode(range.endContainer, container);
-            if (charsBeforeStart < 0 || charsBeforeEnd < 0) {
-                console.warn('out of range');
-                return;
+                let sel_start = range.startOffset;
+                let sel_end = range.endOffset;
+
+                let charsBeforeStart = this.getCharactersCountUntilNode(range.startContainer, container);
+                let charsBeforeEnd = this.getCharactersCountUntilNode(range.endContainer, container);
+                if (charsBeforeStart < 0 || charsBeforeEnd < 0) {
+                    console.warn('out of range');
+                    return;
+                }
+                let start_index = charsBeforeStart + sel_start;
+                let end_index = charsBeforeEnd + sel_end;
+                //if (color!=="clear")
+                this.markUpAdd(start_index, end_index, key)
+                //}
             }
-            let start_index = charsBeforeStart + sel_start;
-            let end_index = charsBeforeEnd + sel_end;
-            //if (color!=="clear")
-            this.markUpAdd(start_index, end_index, key)
-            //}
+        }
+        else{
+            alert("Editieren des Highlightings nach einer Prediction nicht möglich")
         }
 
 
@@ -303,7 +314,7 @@ class App extends React.Component {
                 this.setState({loading: false})
                 return
             }
-
+            console.log(this.state.openTicket)
             let feedback = {
                 usercode: this.state.usercode,
                 systemId: this.state.openTicket.systemId,
@@ -319,6 +330,8 @@ class App extends React.Component {
                     solutionFeedvack_three: this.state.solutionFeedback[2],
                 }
             }
+            console.log(this.state.solutionTickets)
+            console.log(feedback)
             fetch('/api/feedbackToDatabase', {
                 method: 'POST',
                 body: JSON.stringify({feedback: feedback}),
@@ -433,7 +446,11 @@ class App extends React.Component {
                                         <Grid item xs={12}>
                                             {this.state.predictionState ?
                                                 <Box display="flex" justifyContent="flex-start">
-                                                    {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <></> :
+                                                    {this.state.currentTicket === this.state.maxTicketNumber -1 ? <>
+                                                            <Button  href={surveyLink} variant="contained">
+                                                                Zur Befragung
+                                                            </Button>
+                                                        </> :
                                                         <Button variant="contained" endIcon={<SendIcon/>}
                                                                 onClick={this.getPrediction}>
                                                             Generiere Empfehlung durch KI Basierend auf dem Highlighting
