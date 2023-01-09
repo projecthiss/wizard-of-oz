@@ -117,10 +117,7 @@ class App extends React.Component {
         }
         const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
         const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
-        console.log("here")
-        console.log(openTicketsDf)
-        console.log(openTicketsDf.shape[0])
-        console.log(this.state.currentTicket)
+
         if (currentTicket !== -1) {
             const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
             openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
@@ -129,8 +126,8 @@ class App extends React.Component {
             this.setState({
                 predictionState: true,
                 currentTicket: currentTicket,
-         //       openTicketsDf: openTicketsDf,
-           //     solutionTicketsDf: solutionTicketsDf,
+                openTicketsDf: openTicketsDf,
+                solutionTicketsDf: solutionTicketsDf,
                 maxTicketNumber: openTicketsDf.shape[0],
                 openTicket: openTicket,
                 solutionTickets: solutionTicket,
