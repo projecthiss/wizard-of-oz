@@ -219,7 +219,7 @@ class App extends React.Component {
         }
 
         d.ticketDescriptionHighlighting = allMarkUp
-
+        console.log(allMarkUp)
         this.setState({openTicket: d, highlightedHTML: this.getMarkup(d)})
 
 
