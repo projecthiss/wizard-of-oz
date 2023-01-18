@@ -32,21 +32,63 @@ class Description extends React.Component {
                             bereits durch das System vormarkiert wird.
                         </li>
                         <li>
-                            Auf Basis der Vormarkierung erhalten bereits drei Empfehlungen, die Sie bitte mit Sternen
+                            Auf Basis der Vormarkierung erhalten bereits drei Empfehlungen, die Sie bitte <b>alle</b> mit Sternen
                             bewerten. (0 Sterne = überhaupt nicht hilfreich; 5 Sterne = total hilfreich)
                         </li>
                         <li> Nun werden Sie gebeten die Markierung anzupassen. Markieren Sie hierzu die gewünschten
                             Stellen mit ihrer Maus oder Finger und wählen Sie eine entsprechende Kategorie.
                         </li>
                         <li>
-                            Anschließend drücken Sie auf „….“, um drei neue Empfehlungen zu erhalten.
+                            Anschließend drücken Sie auf „Generiere Empfehlung durch KI-basierend auf dem Highlighting“, um drei neue Empfehlungen zu erhalten.
                         </li>
-                        <li>Bewerten Sie die Empfehlungen erneut mit Sternen.
+                        <li>Bewerten Sie <b>alle</b> Empfehlungen erneut mit Sternen (0 Sterne = überhaupt nicht hilfreich; 5 Sterne = total hilfreich).
                         </li>
                         <li>
-                            Wählen Sie die Lösung aus, die Sie für die Problemstellung verwendet hätten.
+                            Wählen Sie schließlich die Lösung aus, die Sie für die Problemstellung verwendet hätten. Dafür klicken Sie auf kreisförmigen Buttons auf der linken Seite.
                         </li>
                     </ol>
+
+                    <br/>
+                    <br/>
+                    Weitere Tipps & Hinweise:
+                    <br/>
+                    <ol>
+                        <li>
+                            Nicht jedes Wort in der Problembeschreibung muss markiert werden. Markieren sie nur relevante Stellen.
+                        </li>
+                        <li>
+                            Klicke auf die empfohlenen Ticket, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
+                        </li>
+                    </ol>
+                    <br/>
+                    <br/>
+                    Folgende Kategorien sollen im Laufe des Experiments korrekt markiert werden:
+                    <br/>
+                    <ol>
+                        <li>
+                            <b>System: </b> Um welche Software oder Hardware handelt es sich? Beispiel: "Microsoft Word"
+                        </li>
+                        <li>
+                            <b>Fehlerbeschreibung: </b> Wie lautet die konkrete Beschreibung des Fehlers? Beispiel: "startet nicht mehr"
+                        </li>
+                        <li>
+                            <b>Auslöser: </b> Was könnte die Ursache für das Problem sein? Beispiel: "nach einem Update"
+                        </li>
+                        <li>
+                            <b>Service Anfrage: </b> Was soll aus sich des Kunden gemacht werden? Beispiel: "einen neuen Account einrichten" 
+                        </li>
+                        <li>
+                            <b>Sonstiges: </b> Welches nützlichen Informationen enthält die Problembeschreibung über die oben genannten Kategorien hinaus? Beispiel: "Version 1.5"
+                        </li>
+                    </ol>
+
+                    <br/>
+                    Bei Fragen wenden Sie sich bitte an <a href= "philipp.reinhard@uni-kassel.de">philipp.reinhard@uni-kassel.de</a>
+                    <br/>
+                    <br/>
+                    Vielen Dank für Ihre Teilnahme!
+
+
                 </Typography>
             </div>
         )
