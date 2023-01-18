@@ -30,7 +30,7 @@ const userInputSchema = new Schema({
         solutionFeedback_two: {required: true, type: Number},
 
         solutionId_three: {required: true, type: String},
-        solutionFeedvack_three: {required: true, type: Number},
+        solutionFeedback_three: {required: true, type: Number},
         }
 })
 
