@@ -54,7 +54,7 @@ class Description extends React.Component {
                             Nicht jedes Wort in der Problembeschreibung muss markiert werden. Markieren sie nur relevante Stellen.
                         </li>
                         <li>
-                            Klicke auf die empfohlenen Ticket, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
+                            Klicke auf die empfohlenen Tickets, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
                         </li>
                     </ul>
                     <br/>
