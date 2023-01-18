@@ -60,12 +60,12 @@ function Copyright(props) {
     );
 }*/
 
-const highlightingCategories = [{name: 'Fehlerbeschreibung', color: '#ffdc00'}, {
-    name: 'System',
-    color: 'rgba(125,255,39,0.4)'},
-    {name: 'Auslöser', color: '#5d0808'},
-    {name: 'Service Anfrage', color: '#ff5c00'},
-    {name: 'Sonstiges', color: '#3741ff'}]
+const highlightingCategories = [
+    {name: 'Fehlerbeschreibung', color: '#D66C85'},
+    {name: 'System', color: '#2F97FF'},
+    {name: 'Auslöser', color: '#FFD03B'},
+    {name: 'Service Anfrage', color: '#9FDB91'},
+    {name: 'Sonstiges', color: '#BDBDBD'}]
 const getColorForKey = (key) => {
     for (let a of highlightingCategories) {
         if (a.name === key) {
