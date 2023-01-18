@@ -25,7 +25,7 @@ const highlightingPath_PRE_recommendation = 'artificial-intelligence-bandit-hiss
 const editingVideo = 'https://www.youtube.com/embed/uCyp5IKjrxU'
 const noEditingVideo = "https://www.youtube.com/embed/52Gg9CqhbP8"
 
-const surveyLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+const surveyLink = "https://docs.google.com/forms/d/1ln8NSvBwaaIZLgJUG0CfS7dXHD5ChQRXBSQ2Hporo4M/edit"
 
 function appBarLabel(label) {
     return (
