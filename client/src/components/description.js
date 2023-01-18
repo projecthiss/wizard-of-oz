@@ -23,7 +23,6 @@ class Description extends React.Component {
                     Empfehlungssystem anwenden. Damit werden Ihnen aus bereits gelösten Fällen Empfehlungen geliefert
                     und es wird Ihnen ermöglicht, Lösungswege zu finden.
                     <br/>
-                    <br/>
                     Folgendermaßen können Sie das System benutzen:
                     <br/>
                     <ol>
@@ -47,8 +46,6 @@ class Description extends React.Component {
                             Wählen Sie schließlich die Lösung aus, die Sie für die Problemstellung verwendet hätten. Dafür klicken Sie auf kreisförmigen Buttons auf der linken Seite.
                         </li>
                     </ol>
-
-                    <br/>
                     <br/>
                     Weitere Tipps & Hinweise:
                     <br/>
@@ -60,7 +57,6 @@ class Description extends React.Component {
                             Klicke auf die empfohlenen Ticket, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
                         </li>
                     </ol>
-                    <br/>
                     <br/>
                     Folgende Kategorien sollen im Laufe des Experiments korrekt markiert werden:
                     <br/>
@@ -81,10 +77,8 @@ class Description extends React.Component {
                             <b>Sonstiges: </b> Welches nützlichen Informationen enthält die Problembeschreibung über die oben genannten Kategorien hinaus? Beispiel: "Version 1.5"
                         </li>
                     </ol>
-
                     <br/>
                     Bei Fragen wenden Sie sich bitte an <a href= "philipp.reinhard@uni-kassel.de">philipp.reinhard@uni-kassel.de</a>
-                    <br/>
                     <br/>
                     Vielen Dank für Ihre Teilnahme!
 
