@@ -15,10 +15,12 @@ import TicketDisplay from "./components/ticketDisplay";
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import {wait} from "@testing-library/user-event/dist/utils";
+import Description from "./components/description";
 
 
 const highlightingPath = 'bandit-artificial-intelligence-hiss'
 const controlGroupPath = 'hiss-artificial-intelligence-bandit'
+const highlightingPath_PRE_recommendation = 'artificial-intelligence-bandit-hiss'
 
 const editingVideo = 'https://www.youtube.com/embed/uCyp5IKjrxU'
 const noEditingVideo = "https://www.youtube.com/embed/52Gg9CqhbP8"
@@ -82,13 +84,14 @@ class App extends React.Component {
         console.log(groupName)
         let error = false
 
-        if ((groupName !== highlightingPath && groupName !== controlGroupPath) ||
+        if ((groupName !== highlightingPath && groupName !== controlGroupPath && groupName !== highlightingPath_PRE_recommendation) ||
             window.location.pathname.split('/')[2] === undefined || window.location.pathname.split('/')[2] === '') {
             error = true
             console.log("ERROR")
         }
 
-        const highlightingEnabled = groupName === highlightingPath
+        const highlightingEnabled = groupName === highlightingPath || groupName === highlightingPath_PRE_recommendation
+        const preSolution = groupName === highlightingPath_PRE_recommendation
 
         //read position from cookie
         this.state = {
@@ -100,9 +103,15 @@ class App extends React.Component {
             solutionTicketsDf: null,
             maxTicketNumber: null,
             openTicket: {},
+            preSolutionTickets: [],
             solutionTickets: [],
             loading: false,
             solutionFeedback: [0, 0, 0],
+            preSolutionFeedback: [0, 0, 0],
+
+            preSolution: preSolution,
+            bestTicket: null,
+            bestPreTicket: null,
         };
 
     }
@@ -123,6 +132,8 @@ class App extends React.Component {
             openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
 
             const solutionTicket = this.getSolutionTicketByRow(openTicket, solutionTicketsDf,)
+            const preSolutionTicket = this.getPreSolutionTicketByRow(openTicket, solutionTicketsDf,)
+
             this.setState({
                 predictionState: true,
                 currentTicket: currentTicket,
@@ -131,9 +142,10 @@ class App extends React.Component {
                 maxTicketNumber: openTicketsDf.shape[0],
                 openTicket: openTicket,
                 solutionTickets: solutionTicket,
+                preSolutionTickets: preSolutionTicket,
                 highlightedHTML: this.getMarkup(openTicket)
             })
-            } else {
+        } else {
             this.setState({
                 predictionState: true,
                 currentTicket: currentTicket,
@@ -179,6 +191,27 @@ class App extends React.Component {
         }
         return solutionTicketsArray
     }
+
+    getPreSolutionTicketByRow = (openTicket, usedDf = this.state.solutionTicketsDf,) => {
+
+        let currentOpenTicket = openTicket
+        let preSolutionTicketsArray = []
+        const keys = ["pre_solutionId1", "pre_solutionId2", "pre_solutionId3"]
+
+        for (let key of keys) {
+            let rowObject = {}
+            let row = dfd.toJSON(usedDf.loc({rows: usedDf['systemId'].eq(parseInt(currentOpenTicket[key]))}), {format: 'row'})
+
+            for (let item in row) {
+                rowObject[item] = row[item][0]
+            }
+            rowObject.ticketDescriptionHighlighting = JSON.parse(rowObject.ticketDescriptionHighlighting)
+            rowObject['highlightedHTML'] = this.getMarkup(rowObject)
+            preSolutionTicketsArray.push(rowObject)
+        }
+        return preSolutionTicketsArray
+    }
+
     getPrediction = async () => {
         this.setState({loading: true}, async () => {
             await wait(1000)
@@ -186,7 +219,16 @@ class App extends React.Component {
             this.setState({loading: false, predictionState: false})
         })
     }
-
+    setBestTicket = (value) => {
+        console.log(value)
+        console.log(typeof value)
+        this.setState({bestTicket: value})
+    }
+    setPreBestTicket = (value) => {
+        console.log(value)
+        console.log(typeof value)
+        this.setState({preBestTicket: value})
+    }
 
     markUpAdd = (start, end, key) => {
         let allMarkUp = this.state.openTicket.ticketDescriptionHighlighting
@@ -250,7 +292,7 @@ class App extends React.Component {
     }
 
     markText = (key) => {
-        if (this.state.predictionState){
+        if (this.state.predictionState) {
 
             let container = document.getElementById("textField")
             let sel = window.getSelection();
@@ -273,12 +315,9 @@ class App extends React.Component {
                 this.markUpAdd(start_index, end_index, key)
                 //}
             }
-        }
-        else{
+        } else {
             alert("Editieren des Highlightings nach einer Prediction nicht möglich")
         }
-
-
     }
     leaveIntro = async () => {
         const tomorrow = new Date();
@@ -293,11 +332,14 @@ class App extends React.Component {
         const openTicket = this.getOpenTickets(currentTicket)
         openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
         const solutionTicket = this.getSolutionTicketByRow(openTicket)
+        const preSolutionTicket = this.getPreSolutionTicketByRow(openTicket)
+
         this.setState({
             predictionState: true,
             currentTicket: currentTicket,
             openTicket: openTicket,
             solutionTickets: solutionTicket,
+            preSolutionTickets: preSolutionTicket,
             highlightedHTML: this.getMarkup(openTicket)
         })
     }
@@ -318,13 +360,22 @@ class App extends React.Component {
                 ticketId: this.state.openTicket.ticketId,
                 group: this.state.highlightingEnabled ? 'Editing' : 'NoEditing',
                 givenHighlighting: this.state.openTicket.ticketDescriptionHighlighting,
+                preSolutionGroup: this.state.preSolution,
                 feedback: {
+                    bestTicket: this.state.bestTicket,
+                    preBestTicket: this.state.preBestTicket,
+                    preSolutionId_one: this.state.preSolutionTickets[0].systemId,
+                    preSolutionFeedback_one: this.state.preSolutionFeedback[0],
+                    preSolutionId_two: this.state.preSolutionTickets[1].systemId,
+                    preSolutionFeedback_two: this.state.preSolutionFeedback[1],
+                    preSolutionId_three: this.state.preSolutionTickets[2].systemId,
+                    preSolutionFeedback_three: this.state.preSolutionFeedback[2],
                     solutionId_one: this.state.solutionTickets[0].systemId,
                     solutionFeedback_one: this.state.solutionFeedback[0],
                     solutionId_two: this.state.solutionTickets[1].systemId,
                     solutionFeedback_two: this.state.solutionFeedback[1],
                     solutionId_three: this.state.solutionTickets[2].systemId,
-                    solutionFeedvack_three: this.state.solutionFeedback[2],
+                    solutionFeedback_three: this.state.solutionFeedback[2],
                 }
             }
             console.log(this.state.solutionTickets)
@@ -341,14 +392,19 @@ class App extends React.Component {
                 const openTicket = this.getOpenTickets(currentTicket)
                 openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
                 const solutionTicket = this.getSolutionTicketByRow(openTicket)
+                const preSolutionTicket = this.getPreSolutionTicketByRow(openTicket)
                 this.setState({
                     loading: false,
                     predictionState: true,
                     currentTicket: currentTicket,
                     openTicket: openTicket,
                     solutionTickets: solutionTicket,
+                    preSolutionTickets: preSolutionTicket,
                     highlightedHTML: this.getMarkup(openTicket),
                     solutionFeedback: [0, 0, 0],
+                    preSolutionFeedback: [0, 0, 0],
+                    preBestTicket: null,
+                    bestTicket: null,
                 })
             }).catch((e) => {
                 console.log(e)
@@ -360,6 +416,11 @@ class App extends React.Component {
         let solutionFeedback = this.state.solutionFeedback
         solutionFeedback[id] = value
         this.setState({solutionFeedback: solutionFeedback})
+    }
+    updatePreFeedback = (id, value) => {
+        let preSolutionFeedback = this.state.preSolutionFeedback
+        preSolutionFeedback[id] = value
+        this.setState({preSolutionFeedback: preSolutionFeedback})
     }
     clearAllMarkUp = () => {
         if (window.confirm('Are you sure you want to clear all Highlighting?')) {
@@ -400,12 +461,14 @@ class App extends React.Component {
                                     <Grid container spacing={2}>
 
                                         <Grid item xs={12}>
-                                            <Box display="flex" justifyContent="flex-end">
+                                            <Box display="flex" justifyContent="flex-start" textAlign={"left"}>
+                                                <Description/>
+                                                {/*
                                                 <iframe
                                                     src={this.state.highlightingEnabled ? editingVideo : noEditingVideo}
                                                     title="Intro Video" frameBorder="0"
                                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                                    allowFullScreen></iframe>
+                                                    allowFullScreen></iframe>*/}
                                             </Box>
                                         </Grid>
 
@@ -443,8 +506,8 @@ class App extends React.Component {
                                         <Grid item xs={12}>
                                             {this.state.predictionState ?
                                                 <Box display="flex" justifyContent="flex-start">
-                                                    {this.state.currentTicket === this.state.maxTicketNumber -1 ? <>
-                                                            <Button  href={surveyLink} variant="contained">
+                                                    {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <>
+                                                            <Button href={surveyLink} variant="contained">
                                                                 Zur Befragung
                                                             </Button>
                                                         </> :
@@ -463,8 +526,23 @@ class App extends React.Component {
                                             <Grid item xs={12}>
                                                 <ControlledAccordions updateFeedBackValue={this.updateFeedback}
                                                                       solutionTickets={this.state.solutionTickets}
-                                                                      solutionFeedback={this.state.solutionFeedback}/>
-                                            </Grid> : <></>}
+                                                                      solutionFeedback={this.state.solutionFeedback}
+                                                                      bestTicket={this.state.bestTicket}
+                                                                      setBestTicket={this.setBestTicket}/>
+                                            </Grid> :
+                                            <>
+                                                {this.state.preSolution && this.state.currentTicket !== this.state.maxTicketNumber - 1 ?
+                                                    <Grid item xs={12}>
+                                                        <ControlledAccordions
+                                                            updateFeedBackValue={this.updatePreFeedback}
+                                                            solutionTickets={this.state.preSolutionTickets}
+                                                            solutionFeedback={this.state.preSolutionFeedback}
+                                                            bestTicket={this.state.preBestTicket}
+                                                            setBestTicket={this.setPreBestTicket}/>
+                                                    </Grid> :
+                                                    <>
+                                                    </>}
+                                            </>}
                                     </Grid>
                                     {/*<Copyright sx={{mt: 8, mb: 4}}/>*/}
                                 </Container>

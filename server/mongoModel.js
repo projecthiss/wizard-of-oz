@@ -8,7 +8,21 @@ const userInputSchema = new Schema({
     group: {required: true, type: String},
     defaultHighlighting: {type: Object, required: true},
     givenHighlighting: {type: Object, required: true},
+    preSolutionGroup: {type: Boolean, required:true},
     feedback: {
+        bestTicket: {type: String},
+        preBestTicket : {type: String},
+
+        preSolutionId_one: {required: true, type: String},
+        preSolutionFeedback_one: {required: true, type: Number},
+
+        preSolutionId_two: {required: true, type: String},
+        preSolutionFeedback_two: {required: true, type: Number},
+
+        preSolutionId_three: {required: true, type: String},
+        preSolutionFeedback_three: {required: true, type: Number},
+
+
         solutionId_one: {required: true, type: String},
         solutionFeedback_one: {required: true, type: Number},
 
