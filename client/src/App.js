@@ -62,8 +62,10 @@ function Copyright(props) {
 
 const highlightingCategories = [{name: 'Fehlerbeschreibung', color: '#ffdc00'}, {
     name: 'System',
-    color: 'rgba(125,255,39,0.4)'
-}, {name: 'Auslöser', color: '#5d0808'}, {name: 'Sonstiges', color: '#3741ff'}]
+    color: 'rgba(125,255,39,0.4)'},
+    {name: 'Auslöser', color: '#5d0808'},
+    {name: 'Service Anfrage', color: '#ff5c00'},
+    {name: 'Sonstiges', color: '#3741ff'}]
 const getColorForKey = (key) => {
     for (let a of highlightingCategories) {
         if (a.name === key) {
