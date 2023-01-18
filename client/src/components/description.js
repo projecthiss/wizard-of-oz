@@ -49,18 +49,18 @@ class Description extends React.Component {
                     <br/>
                     Weitere Tipps & Hinweise:
                     <br/>
-                    <ol>
+                    <ul>
                         <li>
                             Nicht jedes Wort in der Problembeschreibung muss markiert werden. Markieren sie nur relevante Stellen.
                         </li>
                         <li>
                             Klicke auf die empfohlenen Ticket, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
                         </li>
-                    </ol>
+                    </ul>
                     <br/>
                     Folgende Kategorien sollen im Laufe des Experiments korrekt markiert werden:
                     <br/>
-                    <ol>
+                    <ul>
                         <li>
                             <b>System: </b> Um welche Software oder Hardware handelt es sich? Beispiel: "Microsoft Word"
                         </li>
@@ -76,7 +76,7 @@ class Description extends React.Component {
                         <li>
                             <b>Sonstiges: </b> Welches nützlichen Informationen enthält die Problembeschreibung über die oben genannten Kategorien hinaus? Beispiel: "Version 1.5"
                         </li>
-                    </ol>
+                    </ul>
                     <br/>
                     Bei Fragen wenden Sie sich bitte an <a href= "philipp.reinhard@uni-kassel.de">philipp.reinhard@uni-kassel.de</a>
                     <br/>
