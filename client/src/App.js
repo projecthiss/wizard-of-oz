@@ -524,27 +524,6 @@ class App extends React.Component {
                                                            clearAllHighlighting={this.clearAllMarkUp}
 
                                             />
-
-
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            {this.state.predictionState ?
-                                                <Box display="flex" justifyContent="flex-start">
-                                                    {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <>
-                                                            <Button href={surveyLink} variant="contained">
-                                                                Zur Befragung
-                                                            </Button>
-                                                        </> :
-                                                        <Button variant="contained" endIcon={<SendIcon/>}
-                                                                onClick={this.getPrediction}>
-                                                            Generiere Empfehlung durch KI Basierend auf dem Highlighting
-                                                        </Button>}
-                                                </Box> : <Box display="flex" justifyContent="flex-end">
-                                                    <Button variant="contained" endIcon={<SendIcon/>}
-                                                            onClick={this.nextTicket}>
-                                                        Zum nächsten Ticket
-                                                    </Button>
-                                                </Box>}
                                         </Grid>
                                         {!this.state.predictionState ?
                                             <Grid item xs={12}>
