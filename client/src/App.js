@@ -436,10 +436,32 @@ class App extends React.Component {
     getMarkup = (object) => {
         let textEdit = object.ticketDescription
         const highlightingCode = object.ticketDescriptionHighlighting.sort((a, b) => parseFloat(b.end) - parseFloat(a.end));
-
+        const ticketTextArray = textEdit.split("\n")
         for (let a of highlightingCode) {
-            textEdit = [textEdit.slice(0, a.end), "</span>", textEdit.slice(a.end)].join('');
-            textEdit = [textEdit.slice(0, a.start), "<span style='background-color: " + getColorForKey(a.key) + "'>", textEdit.slice(a.start)].join('');
+            let newStart = a.start
+            let newEnd= a.end
+            let c=0
+            let lines=0
+            for (const e of ticketTextArray){
+                c += e.length
+                if (c>=newStart) {
+                    newStart += lines
+                    break
+                }
+                lines++
+            }
+            c=0
+            lines=0
+            for (const e of ticketTextArray){
+                c += e.length
+                if (c>=newEnd) {
+                    newEnd += lines
+                    break
+                }
+                lines++
+            }
+            textEdit = [textEdit.slice(0, newEnd), "</span>", textEdit.slice(newEnd)].join('');
+            textEdit = [textEdit.slice(0, newStart), "<span style='background-color: " + getColorForKey(a.key) + "'>", textEdit.slice(newStart)].join('');
         }
         return textEdit
     }
