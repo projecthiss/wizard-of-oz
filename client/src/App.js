@@ -17,10 +17,19 @@ import CircularProgress from '@mui/material/CircularProgress';
 import {wait} from "@testing-library/user-event/dist/utils";
 import Description from "./components/description";
 
+/*
+highlightingPath = Mit Highlighting ohne Pre-Predictions
+controlGroupPath = Ohne irgendwas, nur Predictions (nicht anpassbares Highlighting)
+highlightingPath_PRE_recommendation =  Mit Highlighting mit Pre-Predictions
+*/
 
 const highlightingPath = 'bandit-artificial-intelligence-hiss'
 const controlGroupPath = 'hiss-artificial-intelligence-bandit'
 const highlightingPath_PRE_recommendation = 'artificial-intelligence-bandit-hiss'
+
+/*
+Tutorial einbetten (Embed_Link von Youtube)
+*/
 
 const editingVideo = 'https://www.youtube.com/embed/uCyp5IKjrxU'
 const noEditingVideo = "https://www.youtube.com/embed/52Gg9CqhbP8"
@@ -33,7 +42,6 @@ function appBarLabel(label) {
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static" sx={{marginBottom: 4}}>
                 <Toolbar>
-
                     <Typography variant="h6" component="div" sx={{flexGrow: 0}}>
                         {label}
                     </Typography>
@@ -85,7 +93,10 @@ class App extends React.Component {
         let groupName = window.location.pathname.split('/')[1]
         console.log(groupName)
         let error = false
-
+        
+        /*
+        Check for errors and user name
+            */
         if ((groupName !== highlightingPath && groupName !== controlGroupPath && groupName !== highlightingPath_PRE_recommendation) ||
             window.location.pathname.split('/')[2] === undefined || window.location.pathname.split('/')[2] === '') {
             error = true
@@ -117,7 +128,11 @@ class App extends React.Component {
         };
 
     }
-
+    /*
+    Load dataframe
+    Check cookies
+    
+    */
     async componentDidMount() {
         let currentTicket = parseInt(cookies.get('HISS-WIZARD-OF-OZ_CURRENT_TICKET'))
         if (isNaN(currentTicket)) {
@@ -128,7 +143,8 @@ class App extends React.Component {
         }
         const openTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_open.xlsx')
         const solutionTicketsDf = await dfd.readExcel((window.location.protocol === 'https:' ? 'https:' : 'http:') + '//' + window.location.host + '/wizard_of_oz_experiment_data_solution.xlsx')
-
+        
+           //Check if start item  
         if (currentTicket !== -1) {
             const openTicket = this.getOpenTickets(currentTicket, openTicketsDf)
             openTicket.ticketDescriptionHighlighting = JSON.parse(openTicket.ticketDescriptionHighlighting)
@@ -159,8 +175,7 @@ class App extends React.Component {
 
 
     }
-
-
+    
     getOpenTickets = (n, usedDf = this.state.openTicketsDf) => {
         console.log(n)
         console.log("hi")
