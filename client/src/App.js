@@ -524,7 +524,7 @@ class App extends React.Component {
                                 </Container>
                             </> :
                             <>
-                                {appBarLabel('HISS - KI basierte Lösungsempfehlung')}
+                                {appBarLabel('AI-based ticket recommender')}
 
                                 <Container component="main" maxWidth="lg">
 
@@ -566,17 +566,17 @@ class App extends React.Component {
                                                 <Box display="flex" justifyContent="flex-start">
                                                     {this.state.currentTicket === this.state.maxTicketNumber - 1 ? <>
                                                             <Button href={surveyLink} variant="contained">
-                                                                Zur Befragung
+                                                            To the survey
                                                             </Button>
                                                         </> :
                                                         <Button variant="contained" endIcon={<SendIcon/>}
                                                                 onClick={this.getPrediction}>
-                                                            Generiere Empfehlung durch KI Basierend auf dem Highlighting
+                                                            Generate recommendation through AI Based on highlighting
                                                         </Button>}
                                                 </Box> : <Box display="flex" justifyContent="flex-end">
                                                     <Button variant="contained" endIcon={<SendIcon/>}
                                                             onClick={this.nextTicket}>
-                                                        Zum nächsten Ticket
+                                                        To the next ticket
                                                     </Button>
                                                 </Box>}
                                         </Grid>

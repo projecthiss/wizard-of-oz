@@ -13,75 +13,65 @@ class Description extends React.Component {
             <div>
                 <br/>
                 <Typography variant="h4" gutterBottom>
-                    Einführung
+                    Introduction
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Versetzen Sie sich in die Rolle eines IT Support Mitarbeitenden. Sie bekommen täglich zahlreiche
-                    technische Problemstellungen oder Anfragen von Ihren Kunden bzw. Arbeitskollegen, die Probleme mit
-                    ihrer IT haben. Die Suche nach Lösungen erweist sich als sehr aufwendig und mit dem Bearbeiten
-                    kommen Sie nur langsam hinterher. Sie können das folgende auf künstlicher Intelligenz basierte
-                    Empfehlungssystem anwenden. Damit werden Ihnen aus bereits gelösten Fällen Empfehlungen geliefert
-                    und es wird Ihnen ermöglicht, Lösungswege zu finden.
+                    Imagine yourself in the role of an IT support staff member. You receive numerous technical issues or inquiries from your customers or colleagues who are experiencing problems with their IT on a daily basis. Finding solutions proves to be very time-consuming, and you are struggling to keep up with the workload. You can apply the following AI-based recommendation system to assist you. It will provide you with recommendations from previously solved cases and enable you to find solutions.
                     <br/>
-                    Folgendermaßen können Sie das System benutzen:
+                    Here's how you can use the system:
                     <br/>
                     <ol>
                         <li>
-                            Sie erhalten ganz oben eine neue Anfrage und eine entsprechende Problembeschreibung, die
-                            bereits durch das System vormarkiert wird.
+                            At the top, you will receive a new request along with a corresponding problem description, which is already pre-marked by the system.
                         </li>
                         <li>
-                            Auf Basis der Vormarkierung erhalten bereits drei Empfehlungen, die Sie bitte <b>alle</b> mit Sternen
-                            bewerten. (0 Sterne = überhaupt nicht hilfreich; 5 Sterne = total hilfreich)
-                        </li>
-                        <li> Nun werden Sie gebeten die Markierung anzupassen. Markieren Sie hierzu die gewünschten
-                            Stellen mit ihrer Maus oder Finger und wählen Sie eine entsprechende Kategorie.
+                            Based on the pre-marking, you will receive three recommendations, which you should rate <b>all</b> with stars (0 stars = not helpful at all; 5 stars = very helpful).
                         </li>
                         <li>
-                            Anschließend drücken Sie auf „Generiere Empfehlung durch KI-basierend auf dem Highlighting“, um drei neue Empfehlungen zu erhalten.
-                        </li>
-                        <li>Bewerten Sie <b>alle</b> Empfehlungen erneut mit Sternen (0 Sterne = überhaupt nicht hilfreich; 5 Sterne = total hilfreich).
+                            You will then be asked to adjust the marking. To do this, use your mouse or finger to highlight the desired areas and select an appropriate category.
                         </li>
                         <li>
-                            Wählen Sie schließlich die Lösung aus, die Sie für die Problemstellung verwendet hätten. Dafür klicken Sie auf kreisförmigen Buttons auf der linken Seite.
+                            Afterward, press "Generate AI-based Recommendation based on Highlighting" to receive three new recommendations.
+                        </li>
+                        <li>Re-rate <b>all</b> recommendations with stars (0 stars = not helpful at all; 5 stars = very helpful).
+                        </li>
+                        <li>
+                            Finally, select the solution you would have used for the problem by clicking on circular buttons on the left side.
                         </li>
                     </ol>
                     <br/>
-                    Weitere Tipps & Hinweise:
+                    More Tips & Hints:
                     <br/>
                     <ul>
                         <li>
-                            Nicht jedes Wort in der Problembeschreibung muss markiert werden. Markieren sie nur relevante Stellen.
+                            Not every word in the problem description needs to be marked. Only highlight relevant areas.
                         </li>
                         <li>
-                            Klicke auf die empfohlenen Tickets, um zur Lösungsbeschreibung zu gelangen und das Problem fiktiv zu lösen
+                            Click on the recommended tickets to access the solution description and fictitiously solve the problem.
                         </li>
                     </ul>
                     <br/>
-                    Folgende Kategorien sollen im Laufe des Experiments korrekt markiert werden:
+                    The following categories should be correctly marked during the course of the experiment:
                     <br/>
                     <ul>
                         <li>
-                            <b>System: </b> Um welche Software oder Hardware handelt es sich? Beispiel: "Microsoft Word"
+                            <b>System: </b> What software or hardware is involved? Example: "Microsoft Word"
                         </li>
                         <li>
-                            <b>Fehlerbeschreibung: </b> Wie lautet die konkrete Beschreibung des Fehlers? Beispiel: "startet nicht mehr"
+                            <b>Error Description: </b> What is the specific description of the error? Example: "won't start anymore"
                         </li>
                         <li>
-                            <b>Auslöser: </b> Was könnte die Ursache für das Problem sein? Beispiel: "nach einem Update"
+                            <b>Trigger: </b> What could be the cause of the problem? Example: "after an update"
                         </li>
                         <li>
-                            <b>Service Anfrage: </b> Was soll aus sich des Kunden gemacht werden? Beispiel: "einen neuen Account einrichten" 
+                            <b>Service Request: </b> What needs to be done from the customer's perspective? Example: "set up a new account"
                         </li>
                         <li>
-                            <b>Sonstiges: </b> Welches nützlichen Informationen enthält die Problembeschreibung über die oben genannten Kategorien hinaus? Beispiel: "Version 1.5"
+                            <b>Additional Information: </b> What useful information does the problem description contain beyond the above-mentioned categories? Example: "Version 1.5"
                         </li>
                     </ul>
-                    <br/>
-                    Bei Fragen wenden Sie sich bitte an <a href= "philipp.reinhard@uni-kassel.de">philipp.reinhard@uni-kassel.de</a>
-                    <br/>
-                    Vielen Dank für Ihre Teilnahme!
-
+                
+                    Thank you for your participation!
 
                 </Typography>
             </div>
@@ -90,3 +80,6 @@ class Description extends React.Component {
 }
 
 export default Description;
+ /* br/>
+                    Bei Fragen wenden Sie sich bitte an <a href= "philipp.reinhard@uni-kassel.de">philipp.reinhard@uni-kassel.de</a>
+                     <br/>*/

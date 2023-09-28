@@ -38,7 +38,7 @@ class ControlledAccordions extends React.Component {
         return (
             <div key={this.props.solutionTickets}>
                 <Typography variant='h6' sx={{fontWeight: 'normal', margin: 2}} align='left'>
-                    Empfohlene Tickets
+                    Recommended tickets
                 </Typography>
 
                         {this.props.solutionTickets.map((item, position) =>
@@ -79,7 +79,7 @@ class ControlledAccordions extends React.Component {
                                         </Grid>
                                         <Grid item xs={4} md={2}>
                                             <Typography align='left'>
-                                                Ersteller: {item.ticketCreator}
+                                                Agent: {item.ticketCreator}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={4} md={1}>
@@ -96,14 +96,14 @@ class ControlledAccordions extends React.Component {
                                 <AccordionDetails>
                                     <Divider sx={{marginBottom: 2}}/>
                                     <Typography variant='subtitle1' sx={{fontWeight: '500'}} align="left">
-                                        Problembeschreibung
+                                        Problem description
                                     </Typography>
                                     <Typography whiteSpace="pre-wrap" align={"left"}
                                                 dangerouslySetInnerHTML={{__html: item.highlightedHTML}}>
                                     </Typography>
                                     <Divider sx={{margin: 2}}/>
                                     <Typography variant='subtitle1' sx={{fontWeight: '500'}} align="left">
-                                        Lösungshistorie
+                                        Solution history
                                     </Typography>
                                     <Typography align="left"
                                                 dangerouslySetInnerHTML={{__html: item.ticketSolutionHistory.replaceAll('\r\n', '<br>')}}>

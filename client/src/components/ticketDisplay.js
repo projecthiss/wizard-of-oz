@@ -32,7 +32,7 @@ class TicketDisplay extends React.Component {
                                 </Grid>
                                 <Grid item xs={6} md={3}>
                                     <Typography align='left'>
-                                        Ersteller: {this.props.openTicket.ticketCreator}
+                                        Agent: {this.props.openTicket.ticketCreator}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12} md={12}>
@@ -91,7 +91,7 @@ class TicketDisplay extends React.Component {
                                                                         <FiberManualRecordIcon style={{color: "white"}}/>
                                                                     </Avatar>
                                                                 }
-                                                                title={'Highlighting entfernen'}
+                                                                title={'Remove highlighting'}
                                                     />
                                                 </ButtonBase>
                                             </Card>
@@ -107,7 +107,7 @@ class TicketDisplay extends React.Component {
                                                                     <HighlightOffIcon/>
                                                                     </Avatar>
                                                                 }
-                                                                title={'Gesamte Highlighting entfernen'}
+                                                                title={'Remove all highlighting'}
                                                     />
                                                 </ButtonBase>
                                             </Card></Grid></>
