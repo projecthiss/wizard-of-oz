@@ -516,7 +516,7 @@ class App extends React.Component {
                                             <Box display="flex" justifyContent="flex-end">
                                                 <Button variant="contained" endIcon={<SendIcon/>}
                                                         onClick={this.leaveIntro}>
-                                                    Nimm an der Studie teil
+                                                    Start the experiment
                                                 </Button>
                                             </Box>
                                         </Grid>
